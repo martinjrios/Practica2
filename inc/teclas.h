@@ -1,6 +1,6 @@
 /*=============================================================================
  * Authors: Martin Rios <jrios@fi.uba.ar> - Lucas Zalazar <lucas.zalazar6@gmail.com>
- * Date: 2021/07/05
+ * Date: 2021/07/12
  * Version: 1.0
  *===========================================================================*/
 
@@ -29,12 +29,13 @@ typedef enum
 
 typedef enum
 {
-	WAITING,
+	WAITING_PRESS,
 	DEBOUNCING,
+	WAITING_RELEASE,
 }dbSt_t;
 
 // DEFINICION DE FUNCIONES DE TECLAS
-bool_t pressKey ( bool_t inverted );
+bool_t keyPressed ( uint8_t key );
 static bool_t readKey ( const gpioMap_t *_keyArray, uint8_t keyIndex );
 
 #endif /* EJERCICIOPROPUESTO_PRACTICA2_INC_TECLAS_H_ */

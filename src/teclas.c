@@ -2,7 +2,7 @@
  * Ejercicio 2
  * file: teclas.c
  * Authors: Martin Rios <jrios@fi.uba.ar> - Lucas Zalazar <lucas.zalazar6@gmail.com>
- * Date: 2021/07/05
+ * Date: 2021/07/12
  * Version: 1.0
  *===========================================================================*/
 #include "teclas.h"
@@ -10,19 +10,15 @@
 /*Arreglo del tipo gpioMap_t para teclas */
 const gpioMap_t keyArray[] = { TEC1, TEC2, TEC3, TEC4 };
 
-//***** LECTURA DE TECLAS PARA INDICAR SENTIDO DE SECUENCIA*************************************
-// Recibe: el estado actual del sentido de la secuencia
-// Devuelve: el nuevo sentido de la secuencia
+//***** FUNCION QUE DETERMINA SI UNA TECLA FUE PRESIONADA **************************************
+// Recibe: el numero de tecla que se quiere consultar
+// Devuelve: TRUE si la tecla fue presionada o FALSE en caso contrario
 // *********************************************************************************************
-bool_t pressKey ( bool_t inverted )
+bool_t keyPressed ( uint8_t key )
 {
-
-	/* Lectura de pulsadores para seleccionar el sentido de la secuencia */
-	if ( readKey ( keyArray, KEY1 ) ) inverted = FALSE;
-	else if ( readKey(keyArray, KEY4 ) ) inverted = TRUE;
-
-	return inverted;
-
+	if(key > LAST_KEY - 1) return FALSE;
+	else if ( readKey ( keyArray, key ) ) return TRUE;
+	else return FALSE;
 }
 
 //***** LECTURA DE TECLAS CON FUNCION ANTIRREBOTE **********************************************
@@ -33,10 +29,9 @@ static bool_t readKey ( const gpioMap_t *_keyArray, uint8_t keyIndex )
 {
 	//DEFINICION DE VARIABLES LOCALES
 	/* Array de estados para asignarle un estado a cada tecla */
-	static dbSt_t debounceState[LAST_KEY] = {WAITING, WAITING, WAITING, WAITING};
+	static dbSt_t debounceState[LAST_KEY] = {WAITING_PRESS, WAITING_PRESS, WAITING_PRESS, WAITING_PRESS};
 	/* Array de retardos para poder asignarle un tiempo antirrebote a cada tecla presionada*/
 	static delay_t debounceDelay[LAST_KEY];
-
 	/* Variable que indica si la tecla fue efectivamente presionada */
 	bool_t keyPressed = false;
 
@@ -45,8 +40,7 @@ static bool_t readKey ( const gpioMap_t *_keyArray, uint8_t keyIndex )
 
 	/* WAITING: */
 	/* Si fue presionada alguna tecla, pasa al estado de DEBOUNCING */
-	case WAITING:
-
+	case WAITING_PRESS:
 		/* Se consulta por la tecla presionada */
 		if(gpioRead(_keyArray[keyIndex]) == PRESSED){
 			/* Cambio de estado de tecla */
@@ -64,7 +58,14 @@ static bool_t readKey ( const gpioMap_t *_keyArray, uint8_t keyIndex )
 			/* Si la tecla sigue presionada entonces se concluye que fue efectivamente presionada */
 			if(gpioRead(_keyArray[keyIndex]) == PRESSED) keyPressed = TRUE;
 			/* Cambio de estado de tecla */
-			debounceState[keyIndex] = WAITING;
+			debounceState[keyIndex] = WAITING_RELEASE;
+		}
+		break;
+
+	case WAITING_RELEASE:
+		/* Se consulta por la tecla liberada */
+		if(gpioRead(_keyArray[keyIndex]) == RELEASED){
+			debounceState[keyIndex] = WAITING_PRESS;
 		}
 		break;
 	}

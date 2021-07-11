@@ -2,7 +2,7 @@
  * Ejercicio 2
  * file: led.c
  * Authors: Martin Rios <jrios@fi.uba.ar> - Lucas Zalazar <lucas.zalazar6@gmail.com>
- * Date: 2021/07/05
+ * Date: 2021/07/12
  * Version: 1.0
  *===========================================================================*/
 #include "led.h"
@@ -37,6 +37,15 @@ bool_t ledOn ( gpioMap_t led )
 	if ( gpioRead ( led ) == OFF ) return FALSE;
 	else return TRUE;
 
+}
+
+//***** FUNCIÓN PARA CAMBIAR EL ESTADO DE UN LED ***********************************************************
+// Recibe: el numero de pin correspondiente a la GPIO del LED que se quiere cambiar
+// Devuelve: TRUE en caso de cambiar el estado del LED correctamente o FALSE en caso contrario.
+// *********************************************************************************************
+bool_t ledToggle( gpioMap_t led )
+{
+	return(gpioToggle ( led ));
 }
 
 //***** FUNCIÓN INDICACIÓN DE ERROR ************************************************************
