@@ -27,6 +27,6 @@ Implementación de un programa que controle la lógica de funcionamiento de una 
 | [led.c](https://github.com/martinjrios/Practica2/blob/main/src/led.c)|[led.h](https://github.com/martinjrios/Practica2/blob/main/inc/led.h)|
 | [teclas.c](https://github.com/martinjrios/Practica2/blob/main/src/teclas.c)|[teclas.h](https://github.com/martinjrios/Practica2/blob/main/inc/teclas.h)|
 
-###### Notas de compilación
+### Notas de compilación
 Seleccionar el punto del ejercicio a compilar comentando o descomentando la macro correspondiente en el archivo [ejercicio2.h](https://github.com/martinjrios/Practica2/blob/main/inc/ejercicio2.h) 
 
